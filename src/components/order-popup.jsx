@@ -22,11 +22,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const OrderPopup = () => {
-  const isOpen = useSelector((state) => state.orderPopupReducer);
+  const isOpen = useSelector((state) => state.orderPopupReducer.open);
   const millData = useSelector((state) => state.millCardForOrderSlice);
   const dispatch = useDispatch();
-
-  console.log("order", millData);
 
   const handleClose = () => {
     dispatch(openDialog(false));
@@ -42,7 +40,7 @@ const OrderPopup = () => {
       >
         {/* Header */}
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Modal title
+          Order Placement Page
         </DialogTitle>
         <DialogContent dividers>
           <Box
@@ -63,8 +61,7 @@ const OrderPopup = () => {
                       mt: "10em",
                     }}
                   >
-                    {/* <MillCardList millData={mill} /> */}
-                    <p>{JSON.stringify(mill)}</p>
+                    <MillCardList millData={mill} />
                   </Box>
                 );
               })
@@ -75,7 +72,7 @@ const OrderPopup = () => {
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Save changes
+            Cancel
           </Button>
         </DialogActions>
       </BootstrapDialog>

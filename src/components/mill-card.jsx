@@ -1,10 +1,27 @@
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import MillCardList from "./mill-card-list";
+import { useState } from "react";
+import { useEffect } from "react";
+import { openDialog } from "../slices/order-popup.slice";
+import { useDispatch } from "react-redux";
+import { setInitalMillCardReducer } from "../slices/mill-card-order.slice";
 
 const MillCard = () => {
-  const millData = useSelector((state) => state.millCardReducerForReview);
-  console.log("mdata", millData);
+  const dispatch = useDispatch();
+  const millData = useSelector(
+    (state) => state.millCardReducerForReview.millCards
+  );
+  const [localMillCard, setLocalMillCard] = useState([]);
+
+  useEffect(() => {
+    setLocalMillCard(millData);
+  }, [millData]);
+
+  const handleClickOpen = () => {
+    dispatch(setInitalMillCardReducer(localMillCard));
+    dispatch(openDialog(true));
+  };
 
   return (
     <>
@@ -17,8 +34,8 @@ const MillCard = () => {
           backgroundColor: "#ADD8E6",
         }}
       >
-        {millData && millData.millCards.length ? (
-          millData.millCards.map((mill) => {
+        {localMillCard && localMillCard.length ? (
+          localMillCard.map((mill) => {
             return (
               <Box
                 key={mill.id}
@@ -26,7 +43,10 @@ const MillCard = () => {
                   mt: "10em",
                 }}
               >
-                <MillCardList millData={mill} />
+                <MillCardList
+                  millData={mill}
+                  handleClickOpen={handleClickOpen}
+                />
               </Box>
             );
           })

@@ -13,27 +13,26 @@ import {
 import { useDispatch } from "react-redux";
 import { reviewPageMillCardReducer } from "../slices/mill-card.slice";
 import { useState } from "react";
-import { openDialog } from "../slices/order-popup.slice";
-import OrderPopup from "./order-popup";
 import { useSelector } from "react-redux";
+import { orderPageMillCardReducer } from "../slices/mill-card-order.slice";
+import { useCallback } from "react";
 
-const MillCardList = ({ millData }) => {
+const MillCardList = ({ millData, handleClickOpen }) => {
   const dispatch = useDispatch();
   const isOpen = useSelector((state) => state.orderPopupReducer).open;
   const [millPrice, setMillPrice] = useState(millData.deliveredPrice);
-  console.log("list", millData);
 
   const handleChange = (e) => {
     setMillPrice(e.target.value);
   };
 
-  const handleOnClick = (millId) => {
-    dispatch(reviewPageMillCardReducer({ millId, millPrice }));
-  };
-
-  const handleClickOpen = () => {
-    dispatch(openDialog(true));
-  };
+  const handleOnBlur = useCallback(() => {
+    if (isOpen) {
+      dispatch(orderPageMillCardReducer({ millId: millData.id, millPrice }));
+    } else {
+      dispatch(reviewPageMillCardReducer({ millId: millData.id, millPrice }));
+    }
+  }, [dispatch, isOpen, millData.id, millPrice]);
 
   return (
     <>
@@ -45,7 +44,11 @@ const MillCardList = ({ millData }) => {
             <Box>
               <FormControl>
                 <InputLabel>Del.Price</InputLabel>
-                <Input value={millPrice} onChange={handleChange} />
+                <Input
+                  value={millPrice}
+                  onChange={handleChange}
+                  onBlur={handleOnBlur}
+                />
               </FormControl>
             </Box>
             {/* Output Field */}
@@ -56,15 +59,10 @@ const MillCardList = ({ millData }) => {
         </CardContent>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <CardActions>
-            <Button onClick={() => handleOnClick(millData.id)}>
-              Change Value
-            </Button>
-            <Button onClick={handleClickOpen}>Order</Button>
+            {!isOpen ? <Button onClick={handleClickOpen}>Order</Button> : null}
           </CardActions>
         </Box>
       </Card>
-      {/* Dialog */}
-      {isOpen && <OrderPopup />}
     </>
   );
 };
