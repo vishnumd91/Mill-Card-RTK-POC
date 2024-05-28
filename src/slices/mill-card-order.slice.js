@@ -1,26 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { baseReducer } from ".";
 
 export const millCardForOrderSlice = createSlice({
   name: "mill-card-order",
   initialState: { millCards: [] },
   reducers: {
-    setInitalMillCardReducer: (state, action) => {
-      return {
-        ...state,
-        millCards: action.payload,
-      };
-    },
-    orderPageMillCardReducer: (state, action) => {
-      const updatedMillData = state.millCards.map((mill) =>
-        mill.id === action.payload.millId
-          ? { ...mill, deliveredPrice: action.payload.millPrice }
-          : mill
-      );
-      return {
-        ...state,
-        millCards: updatedMillData,
-      };
-    },
+    ...baseReducer,
   },
 });
 
