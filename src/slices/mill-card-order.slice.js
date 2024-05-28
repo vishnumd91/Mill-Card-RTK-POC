@@ -5,7 +5,8 @@ export const millCardForOrderSlice = createSlice({
   name: "mill-card-order",
   initialState: { millCards: [] },
   reducers: {
-    ...baseReducer,
+    setInitalMillCardReducer: baseReducer.setInitalMillCardReducer,
+    orderPageMillCardReducer: baseReducer.millCardReducer,
   },
 });
 

@@ -6,7 +6,7 @@ export const millCardForReviewSlice = createSlice({
   name: "mill-card-review",
   initialState: millCardState,
   reducers: {
-    ...baseReducer,
+    reviewPageMillCardReducer: baseReducer.millCardReducer,
   },
 });
 
